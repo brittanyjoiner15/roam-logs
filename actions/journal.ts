@@ -5,7 +5,6 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function createJournalEntry(formData: FormData) {
-  console.log('=== CREATE JOURNAL ENTRY WITH PHOTOS ===')
 
   const supabase = await createClient()
 
@@ -14,8 +13,6 @@ export async function createJournalEntry(formData: FormData) {
   if (authError || !user) {
     return { error: 'You must be logged in to create a journal entry' }
   }
-
-  console.log('User authenticated:', user.id)
 
   // Extract form data
   const googlePlaceId = formData.get('googlePlaceId') as string
@@ -29,9 +26,6 @@ export async function createJournalEntry(formData: FormData) {
   const notes = formData.get('notes') as string
   const status = formData.get('status') as 'published' | 'draft'
   const photos = formData.getAll('photos') as File[]
-
-  console.log('Photos to upload:', photos.length)
-  console.log('Photo details:', photos.map(p => ({ name: p.name, size: p.size, type: p.type })))
 
   // Find or create campground
   let { data: campground } = await supabase
@@ -76,8 +70,6 @@ export async function createJournalEntry(formData: FormData) {
     .select('id')
     .single()
 
-  console.log('Journal entry creation result:', { journalEntry, journalError })
-
   if (journalError) {
     console.error('Error creating journal entry:', journalError)
     return { error: 'Failed to create journal entry' }
@@ -85,22 +77,18 @@ export async function createJournalEntry(formData: FormData) {
 
   // Upload photos if any
   if (photos.length > 0 && journalEntry) {
-    console.log('Uploading photos...')
 
     for (let i = 0; i < photos.length; i++) {
       const photo = photos[i]
 
       // Skip empty files
       if (photo.size === 0) {
-        console.log(`Skipping empty file at index ${i}`)
         continue
       }
 
       const timestamp = Date.now()
       const filename = `${timestamp}-${photo.name}`
       const storagePath = `${user.id}/${campground.id}/${filename}`
-
-      console.log(`Uploading photo ${i + 1}/${photos.length}:`, { filename, size: photo.size, type: photo.type })
 
       // Upload to Supabase Storage
       const { error: uploadError } = await supabase.storage
@@ -114,8 +102,6 @@ export async function createJournalEntry(formData: FormData) {
         console.error('Error uploading photo:', uploadError)
         continue // Skip this photo but continue with others
       }
-
-      console.log('Photo uploaded successfully:', storagePath)
 
       // Construct public URL
       const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/campground-photos/${storagePath}`
@@ -133,14 +119,8 @@ export async function createJournalEntry(formData: FormData) {
 
       if (photoError) {
         console.error('Error creating photo record:', photoError)
-      } else {
-        console.log('Photo record created in database')
       }
     }
-
-    console.log('All photos processed')
-  } else {
-    console.log('No photos to upload or no journal entry created')
   }
 }
 

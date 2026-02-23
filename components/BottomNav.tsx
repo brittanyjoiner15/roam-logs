@@ -39,7 +39,7 @@ export default function BottomNav({ username }: BottomNavProps) {
         </Link>
 
         {/* Journal */}
-        <Link
+        {/* <Link
           href="/journal"
           className={`flex flex-col items-center justify-center flex-1 h-full ${
             isActive('/journal') ? 'text-brand' : 'text-gray-600'
@@ -59,7 +59,7 @@ export default function BottomNav({ username }: BottomNavProps) {
             />
           </svg>
           <span className="text-xs mt-1">Journal</span>
-        </Link>
+        </Link> */}
 
         {/* Feed */}
         <Link

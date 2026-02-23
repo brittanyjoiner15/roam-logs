@@ -19,13 +19,13 @@ export async function login(formData: FormData) {
     redirect('/login?error=' + encodeURIComponent(error.message))
   }
 
-  revalidatePath('/test')
-  redirect('/test')
+  revalidatePath('/feed')
+  redirect('/feed')
 }
 
 export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()
-  revalidatePath('/test')
+  revalidatePath('/feed')
   redirect('/login')
 }

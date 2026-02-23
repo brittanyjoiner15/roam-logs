@@ -60,7 +60,7 @@ export default async function LoginPage({
         </form>
 
         <p className="mt-4 text-center text-sm text-gray-600">
-          Test with one of your existing accounts
+          Still in beta. Adding new users each week!
         </p>
       </div>
     </div>
