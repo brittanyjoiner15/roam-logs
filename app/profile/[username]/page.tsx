@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import FollowButton from '@/components/FollowButton'
+import DeleteEntryButton from '@/components/DeleteEntryButton'
 
 export default async function ProfilePage({
   params,
@@ -234,6 +235,19 @@ export default async function ProfilePage({
                   <p className="text-xs text-gray-400 mt-3">
                     📍 {entry.campgrounds.formatted_address}
                   </p>
+                )}
+
+                {/* Edit / Delete — only visible on own profile */}
+                {isOwnProfile && (
+                  <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100">
+                    <Link
+                      href={`/journal-entry/${entry.id}/edit`}
+                      className="text-sm text-gray-400 hover:text-brand transition-colors"
+                    >
+                      Edit
+                    </Link>
+                    <DeleteEntryButton entryId={entry.id} username={profile.username} />
+                  </div>
                 )}
               </div>
             ))}
