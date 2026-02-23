@@ -120,7 +120,12 @@ export default async function ProfilePage({
                 )}
 
                 {isOwnProfile && (
-                  <span className="text-sm text-gray-400 whitespace-nowrap">Your profile</span>
+                  <Link
+                    href={`/profile/${profile.username}/edit`}
+                    className="px-5 py-2 rounded-button font-semibold text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors whitespace-nowrap"
+                  >
+                    Edit
+                  </Link>
                 )}
               </div>
 
