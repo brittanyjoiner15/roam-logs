@@ -59,3 +59,19 @@ export async function updateProfile(formData: FormData) {
   revalidatePath(`/profile/${username}`)
   redirect(`/profile/${username}`)
 }
+
+export async function searchUsers(query: string) {
+  const supabase = await createClient()
+
+  const trimmed = query.trim()
+  if (!trimmed) return { results: [] }
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('username, full_name, avatar_url')
+    .or(`username.ilike.%${trimmed}%,full_name.ilike.%${trimmed}%`)
+    .limit(20)
+
+  if (error) return { error: error.message }
+  return { results: data ?? [] }
+}
