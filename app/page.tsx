@@ -248,6 +248,14 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ── DELIGHT MOMENT ──────────────────────────────────────────── */}
+      <section className="bg-pine py-12 px-6 text-center">
+        <p className="text-white/50 text-xs uppercase tracking-widest mb-3">A small thing</p>
+        <p className="text-white text-xl md:text-2xl font-medium max-w-lg mx-auto leading-relaxed">
+          Oh, and our loading screens have cats driving camper vans. 🐱🚐
+        </p>
+      </section>
+
       {/* ── FINAL CTA ───────────────────────────────────────────────── */}
       <section className="bg-ink py-24 px-6 text-center">
         <div className="max-w-2xl mx-auto">
