@@ -191,7 +191,7 @@ export default async function ProfilePage({
                 href="/search"
                 className="mt-3 inline-block text-brand text-sm hover:underline"
               >
-                Search for a campground to log your first visit
+                Search for a campground to log your first journal entry.
               </Link>
             )}
           </div>
