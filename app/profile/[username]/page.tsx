@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import FollowButton from '@/components/FollowButton'
 import DeleteEntryButton from '@/components/DeleteEntryButton'
+import { logout } from '@/actions/auth'
 
 export default async function ProfilePage({
   params,
@@ -121,12 +122,22 @@ export default async function ProfilePage({
                 )}
 
                 {isOwnProfile && (
-                  <Link
-                    href={`/profile/${profile.username}/edit`}
-                    className="px-5 py-2 rounded-button font-semibold text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors whitespace-nowrap"
-                  >
-                    Edit
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/profile/${profile.username}/edit`}
+                      className="px-5 py-2 rounded-button font-semibold text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors whitespace-nowrap"
+                    >
+                      Edit
+                    </Link>
+                    <form action={logout}>
+                      <button
+                        type="submit"
+                        className="px-4 py-2 rounded-button text-sm border border-gray-300 text-gray-500 hover:bg-gray-50 transition-colors whitespace-nowrap"
+                      >
+                        Log out
+                      </button>
+                    </form>
+                  </div>
                 )}
               </div>
 
