@@ -2,6 +2,7 @@ import { getCampgroundDetails } from '@/actions/campground'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { format } from 'date-fns'
+import LogVisitButton from '@/components/LogVisitButton'
 
 export default async function CampgroundDetailPage({
   params,
@@ -82,11 +83,6 @@ export default async function CampgroundDetailPage({
       .eq('campground_id', campground.id)
 
     allEntries = debugEntries || []
-
-    console.log('Debug - Campground ID:', campground.id)
-    console.log('Debug - All entries (any status):', allEntries)
-    console.log('Debug - Published entries:', entries)
-    console.log('Debug - Entries error:', entriesError)
   }
 
   return (
@@ -168,14 +164,16 @@ export default async function CampgroundDetailPage({
           )}
 
           {/* Log Visit Button */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <button className="w-full bg-brand text-white py-3 px-6 rounded-button hover:bg-brand/90 transition-colors font-medium text-lg">
-              Log a Visit
-            </button>
-            <p className="text-sm text-gray-500 text-center mt-2">
-              We'll add this to your journal
-            </p>
-          </div>
+          <LogVisitButton
+            campground={{
+              googlePlaceId: id,
+              name: place.name,
+              address: place.vicinity || place.formatted_address || '',
+              formattedAddress: place.formatted_address || '',
+              latitude: place.geometry?.location?.lat || 0,
+              longitude: place.geometry?.location?.lng || 0,
+            }}
+          />
         </div>
 
         {/* Journal Entries */}
