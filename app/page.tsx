@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 
-// TODO: Replace with your waitlist URL (Typeform, Google Form, Mailchimp, etc.)
-const WAITLIST_URL = '#waitlist'
 
 export default async function Home() {
   const supabase = await createClient()
@@ -72,12 +70,12 @@ export default async function Home() {
               Go to my feed →
             </Link>
           ) : (
-            <a
-              href={WAITLIST_URL}
+            <Link
+              href="/signup"
               className="inline-block bg-brand text-white text-lg font-semibold px-10 py-4 rounded-button hover:bg-brand/90 transition-colors shadow-lg"
             >
-              Join the Waitlist
-            </a>
+              Join early access
+            </Link>
           )}
         </div>
       </section>
@@ -276,12 +274,12 @@ export default async function Home() {
               Go to my feed →
             </Link>
           ) : (
-            <a
-              href={WAITLIST_URL}
+            <Link
+              href="/signup"
               className="inline-block bg-brand text-white text-lg font-semibold px-10 py-4 rounded-button hover:bg-brand/90 transition-colors"
             >
-              Join the Waitlist
-            </a>
+              Join early access
+            </Link>
           )}
         </div>
       </section>
