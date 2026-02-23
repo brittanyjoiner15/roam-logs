@@ -148,7 +148,7 @@ export default function SearchPage() {
                 onKeyDown={(e) => e.key === 'Escape' && setShowDropdown(false)}
                 placeholder={
                   tab === 'campgrounds'
-                    ? 'Search for a campground...'
+                    ? 'Search for a campground to log a journal entry...'
                     : 'Search by name or username...'
                 }
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-brand"

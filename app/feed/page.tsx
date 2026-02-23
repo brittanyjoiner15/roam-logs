@@ -60,7 +60,7 @@ export default async function FeedPage() {
               href="/search"
               className="inline-block text-brand text-sm font-medium hover:underline"
             >
-              Search campgrounds to find campers →
+              Search to find campers →
             </Link>
           </div>
         ) : (
