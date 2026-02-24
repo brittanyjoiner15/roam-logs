@@ -3,6 +3,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import Mixpanel from 'mixpanel'
+
+const mixpanel = Mixpanel.init(process.env.MIXPANEL_TOKEN!);
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -10,7 +13,7 @@ export async function login(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
@@ -19,11 +22,17 @@ export async function login(formData: FormData) {
     redirect('/login?error=' + encodeURIComponent(error.message))
   }
 
+  console.log("Sending to mixpanel");
+  mixpanel.people.set(data.user.id, {
+     $email: email,
+     username: data.user.user_metadata.username,
+  });  
   revalidatePath('/feed')
   redirect('/feed')
 }
 
 export async function signup(formData: FormData) {
+  console.log("Starting up")
   const supabase = await createClient()
 
   const email = formData.get('email') as string
@@ -38,7 +47,7 @@ export async function signup(formData: FormData) {
     .single()
 
   if (existing) {
-    redirect('/signup?error=' + encodeURIComponent('Username already taken'))
+    redirect('/signup?error=' + encodeURIComponent('Sorry that didn\'t work. Please try a different username.'))
   }
 
   const { data, error } = await supabase.auth.signUp({ email, password })
@@ -52,9 +61,14 @@ export async function signup(formData: FormData) {
       .from('profiles')
       .upsert({ id: data.user.id, username })
   }
+  
 
   // If session exists, email confirmation is off — go straight to feed
   if (data.session) {
+    mixpanel.people.set(data.session?.user?.id, {
+    $email: email,
+    username: username,
+  }); 
     revalidatePath('/feed')
     redirect('/feed')
   }
