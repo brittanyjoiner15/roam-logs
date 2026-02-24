@@ -69,7 +69,6 @@ export default function EditJournalEntryForm({
 
     removedPhotoIds.forEach((id) => formData.append('delete_photo_ids', id))
     newPhotos.forEach((photo) => formData.append('photos', photo))
-
     const result = await updateJournalEntry(formData)
 
     if (result?.error) {

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { searchCampgrounds } from '@/actions/campground'
 import { searchUsers } from '@/actions/profile'
 import Link from 'next/link'
+import mixpanel from 'mixpanel-browser'
 
 type Tab = 'campgrounds' | 'people'
 
@@ -45,6 +46,8 @@ export default function SearchPage() {
     const delay = tab === 'campgrounds' ? 500 : 300
     const timer = setTimeout(async () => {
       setDropdownLoading(true)
+      mixpanel.track('Search Typed', { query: trimmed, type: tab })
+    
       if (tab === 'campgrounds') {
         const res = await searchCampgrounds(trimmed)
         setDropdownCampgrounds(res.results?.slice(0, 5) ?? [])
@@ -82,7 +85,14 @@ export default function SearchPage() {
     setSearched(false)
   }
 
+  // function to setDropdown to false and log mixpanel track event when user clicks on a dropdown item
+  const handleDropdownClick = (type: Tab) => {
+    mixpanel.track('Search Result Clicked', { query, type })
+    setShowDropdown(false)
+  }
+
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    mixpanel.track('Search Button Clicked', { query, type: tab })
     e.preventDefault()
     if (!query.trim()) return
 
@@ -174,7 +184,7 @@ export default function SearchPage() {
                   <Link
                     key={place.place_id ?? i}
                     href={`/campground/${place.place_id}`}
-                    onClick={() => setShowDropdown(false)}
+                    onClick={() => handleDropdownClick('campgrounds')}
                     className="flex flex-col px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0"
                   >
                     <span className="font-medium text-ink text-sm">{place.name}</span>
@@ -186,7 +196,7 @@ export default function SearchPage() {
                   <Link
                     key={person.username}
                     href={`/profile/${person.username}`}
-                    onClick={() => setShowDropdown(false)}
+                    onClick={() => handleDropdownClick('people')}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0"
                   >
                     {person.avatar_url ? (

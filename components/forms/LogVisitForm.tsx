@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createJournalEntry } from '@/actions/journal'
 import { set } from 'date-fns'
+import mixpanel from 'mixpanel-browser'
 
 type LogVisitFormProps = {
   campground: {
@@ -39,6 +40,7 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    mixpanel.track('Journal Entry Submitted', { campground: campground.name, photosCount: photos.length, hasNotes: !!notes })
     setLoading(true)
     setError('')
 
