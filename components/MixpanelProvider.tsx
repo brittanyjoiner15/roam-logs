@@ -20,7 +20,7 @@ export default function MixpanelProvider({ userId }: MixpanelProviderProps) {
       mixpanel.identify(String(userId))
       mixpanel.people.set({
         last_seen_user_agent: navigator.userAgent,
-        last_seen_platform: navigator.userAgentData?.platform || navigator.platform,
+        last_seen_platform: navigator.platform,
         last_seen_mobile: /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent),
       })
       return
