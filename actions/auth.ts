@@ -50,6 +50,12 @@ export async function signup(formData: FormData) {
     redirect('/signup?error=' + encodeURIComponent('Sorry that didn\'t work. Please try a different username.'))
   }
 
+  // Log Mixpanel event for sign up attempt
+  mixpanel.track('Sign Up Form', {
+    email: email,
+    username: username,
+  });
+
   const { data, error } = await supabase.auth.signUp({ email, password })
 
   if (error) {
@@ -66,14 +72,19 @@ export async function signup(formData: FormData) {
   // If session exists, email confirmation is off — go straight to feed
   if (data.session) {
     mixpanel.people.set(data.session?.user?.id, {
-    $email: email,
-    username: username,
-  }); 
+      $email: email,
+      username: username,
+    });   
+    mixpanel.track('Login', {
+      distinct_id: data.session?.user?.id,
+      email: email,
+    });
     revalidatePath('/feed')
     redirect('/feed')
   }
 
   // Otherwise, prompt them to check their email
+
   redirect('/signup/confirm')
 }
 
