@@ -155,6 +155,15 @@ export default async function ProfilePage({
                   <p className="font-bold text-ink text-sm">{campgroundsVisited}</p>
                   <p className="text-xs text-gray-500">Campgrounds</p>
                 </div>
+                {campgroundsVisited > 0 && (
+                  <Link
+                    href={`/profile/${profile.username}/map`}
+                    className="text-center hover:opacity-70 transition-opacity"
+                  >
+                    <p className="text-sm leading-5">🗺️</p>
+                    <p className="text-xs text-brand font-medium">View Map</p>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
