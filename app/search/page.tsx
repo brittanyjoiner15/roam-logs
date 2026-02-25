@@ -247,13 +247,6 @@ export default function SearchPage() {
                   </p>
                 )}
                 <p className="text-xs text-brand mt-2">Tap to view details →</p>
-                {/* Debug: Show raw data */}
-                <details className="mt-2" onClick={(e) => e.preventDefault()}>
-                  <summary className="text-xs text-gray-400 cursor-pointer">Raw data</summary>
-                  <pre className="text-xs bg-gray-100 p-2 rounded mt-1 overflow-auto">
-                    {JSON.stringify(place, null, 2)}
-                  </pre>
-                </details>
               </Link>
             ))}
           </div>

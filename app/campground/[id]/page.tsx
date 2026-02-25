@@ -242,16 +242,6 @@ export default async function CampgroundDetailPage({
                       })}
                     </div>
                   )}
-
-                  {/* Debug */}
-                  <details className="mt-2">
-                    <summary className="text-xs text-gray-400 cursor-pointer">
-                      Raw entry data
-                    </summary>
-                    <pre className="text-xs bg-gray-100 p-2 rounded mt-1 overflow-auto">
-                      {JSON.stringify(entry, null, 2)}
-                    </pre>
-                  </details>
                 </div>
               ))}
             </div>
