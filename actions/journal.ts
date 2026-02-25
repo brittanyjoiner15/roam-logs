@@ -18,7 +18,6 @@ export async function createJournalEntry(formData: FormData) {
   const googlePlaceId = formData.get('googlePlaceId') as string
   const campgroundName = formData.get('campgroundName') as string
   const campgroundAddress = formData.get('campgroundAddress') as string
-  const campgroundFormattedAddress = formData.get('campgroundFormattedAddress') as string
   const latitude = parseFloat(formData.get('latitude') as string)
   const longitude = parseFloat(formData.get('longitude') as string)
   const startDate = formData.get('startDate') as string
@@ -41,7 +40,6 @@ export async function createJournalEntry(formData: FormData) {
         google_place_id: googlePlaceId,
         name: campgroundName,
         address: campgroundAddress,
-        formatted_address: campgroundFormattedAddress,
         latitude,
         longitude,
       })

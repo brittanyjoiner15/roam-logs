@@ -18,6 +18,8 @@ type LogVisitButtonProps = {
 export default function LogVisitButton({ campground }: LogVisitButtonProps) {
   const [showForm, setShowForm] = useState(false)
 
+  console.log(campground)
+
   const logVisit = () => {
     mixpanel.track('Log Visit Clicked', { campground: campground.name })
     setShowForm(true)
@@ -45,6 +47,7 @@ export default function LogVisitButton({ campground }: LogVisitButtonProps) {
       <button
         onClick={() => logVisit()}
         className="w-full bg-brand text-white py-3 px-6 rounded-button hover:bg-brand/90 transition-colors font-medium text-lg"
+        disabled={campground.latitude === 0 || campground.longitude === 0}
       >
         Log a Visit
       </button>

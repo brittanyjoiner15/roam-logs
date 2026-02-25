@@ -10,7 +10,6 @@ type LogVisitFormProps = {
     googlePlaceId: string
     name: string
     address: string
-    formattedAddress: string
     latitude: number
     longitude: number
   }
@@ -49,7 +48,6 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
     formData.append('googlePlaceId', campground.googlePlaceId)
     formData.append('campgroundName', campground.name)
     formData.append('campgroundAddress', campground.address)
-    formData.append('campgroundFormattedAddress', campground.formattedAddress)
     formData.append('latitude', campground.latitude.toString())
     formData.append('longitude', campground.longitude.toString())
     formData.append('startDate', startDate)

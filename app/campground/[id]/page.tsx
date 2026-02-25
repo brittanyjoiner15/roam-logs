@@ -248,15 +248,6 @@ export default async function CampgroundDetailPage({
           </div>
         )}
 
-        {/* No entries message */}
-        {!campground && (
-          <div className="bg-yellow-100 rounded-card p-6 text-center text-gray-600">
-            <p className="font-bold mb-2">🔍 Debug: Campground not found in database</p>
-            <p className="text-sm">Looking for google_place_id: <code className="bg-white px-2 py-1 rounded">{id}</code></p>
-            <p className="text-xs mt-2">This campground hasn't been saved to the database yet. It will be saved when someone logs their first visit.</p>
-          </div>
-        )}
-
         {campground && journalEntries.length === 0 && (
           <div className="bg-gray-100 rounded-card p-6 text-gray-600">
             <p className="font-bold text-center mb-4">🔍 Debug: Journal Entry Query</p>
