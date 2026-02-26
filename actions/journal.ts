@@ -70,7 +70,7 @@ export async function createJournalEntry(formData: FormData) {
 
   if (journalError) {
     console.error('Error creating journal entry:', journalError)
-    return { error: 'Failed to create journal entry' }
+    return { error: journalError.message }
   }
 
   // Upload photos if any
