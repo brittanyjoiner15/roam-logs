@@ -106,7 +106,7 @@ export default async function ProfilePage({
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <h1 className="text-xl font-bold text-ink truncate">
+                  <h1 className="text-xl font-bold text-ink">
                     {profile.full_name || profile.username}
                   </h1>
                   <p className="text-gray-500 text-sm">@{profile.username}</p>
@@ -122,19 +122,30 @@ export default async function ProfilePage({
                 )}
 
                 {isOwnProfile && (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     <Link
                       href={`/profile/${profile.username}/edit`}
-                      className="px-5 py-2 rounded-button font-semibold text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors whitespace-nowrap"
+                      className="p-2 rounded-button border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+                      title="Edit profile"
                     >
-                      Edit
+                      {/* Pencil icon */}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
                     </Link>
                     <form action={logout}>
                       <button
                         type="submit"
-                        className="px-4 py-2 rounded-button text-sm border border-gray-300 text-gray-500 hover:bg-gray-50 transition-colors whitespace-nowrap"
+                        className="p-2 rounded-button border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+                        title="Log out"
                       >
-                        Log out
+                        {/* Logout icon */}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                          <polyline points="16 17 21 12 16 7"/>
+                          <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
                       </button>
                     </form>
                   </div>
@@ -155,18 +166,19 @@ export default async function ProfilePage({
                   <p className="font-bold text-ink text-sm">{campgroundsVisited}</p>
                   <p className="text-xs text-gray-500">Campgrounds</p>
                 </div>
-                {campgroundsVisited > 0 && (
-                  <Link
-                    href={`/profile/${profile.username}/map`}
-                    className="text-center hover:opacity-70 transition-opacity"
-                  >
-                    <p className="text-sm leading-5">🗺️</p>
-                    <p className="text-xs text-brand font-medium">View Map</p>
-                  </Link>
-                )}
               </div>
             </div>
           </div>
+
+          {/* View Map button */}
+          {campgroundsVisited > 0 && (
+            <Link
+              href={`/profile/${profile.username}/map`}
+              className="mt-4 flex items-center justify-center gap-2 w-full py-2 rounded-button border border-brand text-brand text-sm font-medium hover:bg-brand hover:text-white transition-colors"
+            >
+              <span>🗺️</span> <span>View Map</span>
+            </Link>
+          )}
 
           {/* Bio */}
           {profile.bio && (
