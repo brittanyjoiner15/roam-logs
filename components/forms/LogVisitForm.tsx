@@ -15,9 +15,17 @@ type LogVisitFormProps = {
   }
 }
 
+function toLocalDateString(date: Date) {
+  return date.toLocaleDateString('en-CA') // YYYY-MM-DD in local time
+}
+
 export default function LogVisitForm({ campground }: LogVisitFormProps) {
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(today.getDate() - 1)
+
+  const [startDate, setStartDate] = useState(toLocalDateString(yesterday))
+  const [endDate, setEndDate] = useState(toLocalDateString(today))
   const [notes, setNotes] = useState('')
   const [photos, setPhotos] = useState<File[]>([])
   const [loading, setLoading] = useState(false)
@@ -82,7 +90,7 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
       )}
 
       {/* Date Range */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">
             Start Date
