@@ -17,6 +17,11 @@ export default function ProfileMenuButton() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const shareMessage = `Hey! Check out my Roam Logs profile to see all the places I've camped and get inspired for your next trip! ${currentUrl}`
+  const shareSMS = `sms:?body=${encodeURIComponent(shareMessage)}`
+  
+
   return (
     <div ref={ref} className="relative">
       <button
@@ -35,6 +40,18 @@ export default function ProfileMenuButton() {
 
       {open && (
         <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-card shadow-lg border border-gray-100 z-50 overflow-hidden">
+            <a
+            href={shareSMS}
+            className="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            onClick={() => setOpen(false)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="5" y="1" width="14" height="22" rx="3" ry="3"/>
+              <line x1="9" y1="4" x2="15" y2="4" strokeWidth="1.5"/>
+              <circle cx="12" cy="19.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+            Send your profile
+          </a>
           <a
             href="https://britt.fillout.com/t/oUfD4qMJRvus"
             className="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -53,7 +70,7 @@ export default function ProfileMenuButton() {
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
             </svg>
-            Share your idea
+            Tell us your idea
           </a>
           <a
             href="https://www.facebook.com/groups/roamloggers"
@@ -65,7 +82,7 @@ export default function ProfileMenuButton() {
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
               <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
             </svg>
-            Join our Facebook group
+            Join FB group
           </a>
           <div className="border-t border-gray-100" />
           <form action={logout}>
