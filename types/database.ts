@@ -1,3 +1,22 @@
+export type RigType =
+  | 'fifth_wheel'
+  | 'travel_trailer'
+  | 'motorhome'
+  | 'van'
+  | 'roof_top_tent'
+  | 'tent'
+  | 'other'
+
+export const RIG_TYPE_LABELS: Record<RigType, string> = {
+  fifth_wheel: 'Fifth Wheel',
+  travel_trailer: 'Travel Trailer',
+  motorhome: 'Motorhome',
+  van: 'Van',
+  roof_top_tent: 'Roof Top Tent',
+  tent: 'Tent',
+  other: 'Other',
+}
+
 export type Profile = {
   id: string
   username: string
@@ -5,6 +24,8 @@ export type Profile = {
   bio: string | null
   avatar_url: string | null
   website: string | null
+  rig_type: RigType | null
+  rig_name: string | null
   created_at: string
   updated_at: string
 }

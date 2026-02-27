@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { parseCityState } from '@/lib/utils'
+import { RIG_TYPE_LABELS } from '@/types/database'
 import FollowButton from '@/components/FollowButton'
 import DeleteEntryButton from '@/components/DeleteEntryButton'
 import ProfileMenuButton from '@/components/ProfileMenuButton'
@@ -172,6 +173,19 @@ export default async function ProfilePage({
           {/* Bio */}
           {profile.bio && (
             <p className="mt-4 text-gray-700 text-sm whitespace-pre-wrap">{profile.bio}</p>
+          )}
+
+          {/* Rig */}
+          {(profile.rig_type || profile.rig_name) && (
+            <p className="mt-2 text-sm text-gray-600">
+              🚐{' '}
+              {[
+                profile.rig_type ? RIG_TYPE_LABELS[profile.rig_type as keyof typeof RIG_TYPE_LABELS] : null,
+                profile.rig_name,
+              ]
+                .filter(Boolean)
+                .join(' · ')}
+            </p>
           )}
 
           {/* Website */}

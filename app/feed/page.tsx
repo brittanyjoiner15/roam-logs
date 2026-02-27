@@ -6,8 +6,6 @@ import SuggestedFollowers from '@/components/SuggestedFollowers'
 import PhotoCarousel from '@/components/PhotoCarousel'
 import { parseCityState } from '@/lib/utils'
 
-const SUGGESTED_USERNAMES = ['VeeWhy', 'britt', 'merylvdm']
-
 export default async function FeedPage() {
   const supabase = await createClient()
 
@@ -27,12 +25,13 @@ export default async function FeedPage() {
 
   const followingIds = following?.map((f) => f.following_id) ?? []
 
-  // Fetch suggested profiles, excluding ones already followed and the current user
+  // Fetch suggested profiles — most recently active, excluding already-followed and self
   const { data: suggestedProfiles } = await supabase
     .from('profiles')
     .select('id, username, full_name, avatar_url')
-    .in('username', SUGGESTED_USERNAMES)
     .neq('id', user.id)
+    .order('updated_at', { ascending: false })
+    .limit(10)
 
   const suggestions = (suggestedProfiles ?? []).filter(
     (p) => !followingIds.includes(p.id)

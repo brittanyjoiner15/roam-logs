@@ -19,6 +19,8 @@ export async function updateProfile(formData: FormData) {
   const full_name = formData.get('full_name') as string
   const bio = formData.get('bio') as string
   const website = formData.get('website') as string
+  const rig_type = formData.get('rig_type') as string
+  const rig_name = formData.get('rig_name') as string
   const avatarFile = formData.get('avatar') as File | null
 
   // Build update object
@@ -26,6 +28,8 @@ export async function updateProfile(formData: FormData) {
     full_name: full_name || null,
     bio: bio || null,
     website: website || null,
+    rig_type: rig_type || null,
+    rig_name: rig_name || null,
   }
 
   // Handle avatar upload

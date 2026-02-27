@@ -3,7 +3,8 @@
 import { useState, useRef } from 'react'
 import { updateProfile } from '@/actions/profile'
 import Link from 'next/link'
-import type { Profile } from '@/types/database'
+import type { Profile, RigType } from '@/types/database'
+import { RIG_TYPE_LABELS } from '@/types/database'
 
 type EditProfileFormProps = {
   profile: Profile
@@ -148,6 +149,32 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
           placeholder="https://yoursite.com"
           className="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-brand"
         />
+      </div>
+
+      {/* Rig */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          My rig <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <select
+            name="rig_type"
+            defaultValue={profile.rig_type ?? ''}
+            className="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-brand bg-white text-sm"
+          >
+            <option value="">Select type...</option>
+            {(Object.entries(RIG_TYPE_LABELS) as [RigType, string][]).map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+          <input
+            name="rig_name"
+            type="text"
+            defaultValue={profile.rig_name ?? ''}
+            placeholder="e.g. 2022 Grand Design Solitude"
+            className="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+          />
+        </div>
       </div>
 
       {/* Actions */}
