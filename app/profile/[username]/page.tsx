@@ -204,7 +204,7 @@ export default async function ProfilePage({
             },
             {
               label: 'Log a journal entry',
-              hint: 'Record your last trip',
+              hint: 'Search for your last campground to add an entry',
               done: false,
               href: '/search',
             },
