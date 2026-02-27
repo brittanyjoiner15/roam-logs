@@ -144,14 +144,14 @@ export default async function ProfilePage({
 
               {/* Stats */}
               <div className="flex gap-5 mt-3">
-                <div className="text-center">
+                <Link href={`/profile/${profile.username}/followers`} className="text-center hover:opacity-70 transition-opacity">
                   <p className="font-bold text-ink text-sm">{followerCount ?? 0}</p>
                   <p className="text-xs text-gray-500">Followers</p>
-                </div>
-                <div className="text-center">
+                </Link>
+                <Link href={`/profile/${profile.username}/following`} className="text-center hover:opacity-70 transition-opacity">
                   <p className="font-bold text-ink text-sm">{followingCount ?? 0}</p>
                   <p className="text-xs text-gray-500">Following</p>
-                </div>
+                </Link>
                 <div className="text-center">
                   <p className="font-bold text-ink text-sm">{campgroundsVisited}</p>
                   <p className="text-xs text-gray-500">Campgrounds</p>
