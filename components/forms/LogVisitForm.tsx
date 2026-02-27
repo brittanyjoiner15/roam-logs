@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createJournalEntry } from '@/actions/journal'
 import { set } from 'date-fns'
 import mixpanel from 'mixpanel-browser'
+import UserTagInput, { type TaggedUser } from '@/components/UserTagInput'
 
 type LogVisitFormProps = {
   campground: {
@@ -28,6 +29,7 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
   const [endDate, setEndDate] = useState(toLocalDateString(today))
   const [notes, setNotes] = useState('')
   const [photos, setPhotos] = useState<File[]>([])
+  const [taggedUsers, setTaggedUsers] = useState<TaggedUser[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -62,6 +64,9 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
     formData.append('endDate', endDate)
     formData.append('notes', notes)
     formData.append('status', 'published')
+
+    // Add tagged users
+    taggedUsers.forEach((u) => formData.append('tagged_user_ids', u.id))
 
     // Add photos
     photos.forEach((photo) => {
@@ -133,6 +138,9 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
           className="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-brand resize-none"
         />
       </div>
+
+      {/* Tag friends */}
+      <UserTagInput value={taggedUsers} onChange={setTaggedUsers} />
 
       {/* Photos */}
       <div>

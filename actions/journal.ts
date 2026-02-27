@@ -25,6 +25,7 @@ export async function createJournalEntry(formData: FormData) {
   const notes = formData.get('notes') as string
   const status = formData.get('status') as 'published' | 'draft'
   const photos = formData.getAll('photos') as File[]
+  const taggedUserIds = formData.getAll('tagged_user_ids') as string[]
 
   // Find or create campground
   let { data: campground } = await supabase
@@ -71,6 +72,16 @@ export async function createJournalEntry(formData: FormData) {
   if (journalError) {
     console.error('Error creating journal entry:', journalError)
     return { error: journalError.message }
+  }
+
+  // Save tagged users
+  if (taggedUserIds.length > 0 && journalEntry) {
+    await supabase.from('journal_entry_tags').insert(
+      taggedUserIds.map((tagged_user_id) => ({
+        journal_entry_id: journalEntry.id,
+        tagged_user_id,
+      }))
+    )
   }
 
   // Upload photos if any
@@ -136,6 +147,7 @@ export async function updateJournalEntry(formData: FormData) {
   const status = formData.get('status') as 'published' | 'draft'
   const deletePhotoIds = formData.getAll('delete_photo_ids') as string[]
   const newPhotos = formData.getAll('photos') as File[]
+  const taggedUserIds = formData.getAll('tagged_user_ids') as string[]
 
   // Verify ownership
   const { data: entry } = await supabase
@@ -190,6 +202,14 @@ export async function updateJournalEntry(formData: FormData) {
         public_url: publicUrl,
       })
     }
+  }
+
+  // Replace tags
+  await supabase.from('journal_entry_tags').delete().eq('journal_entry_id', entryId)
+  if (taggedUserIds.length > 0) {
+    await supabase.from('journal_entry_tags').insert(
+      taggedUserIds.map((tagged_user_id) => ({ journal_entry_id: entryId, tagged_user_id }))
+    )
   }
 
   // Update the entry

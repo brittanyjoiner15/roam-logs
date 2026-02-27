@@ -29,7 +29,8 @@ export async function loadMoreFeedEntries(offset: number) {
       *,
       campgrounds(*),
       photos(*),
-      profiles!user_id(username, full_name, avatar_url)
+      profiles!user_id(username, full_name, avatar_url),
+      journal_entry_tags(tagged_user_id, profiles!tagged_user_id(username, avatar_url))
     `)
     .in('user_id', followingIds)
     .eq('status', 'published')

@@ -84,7 +84,7 @@ export async function searchUsers(query: string) {
 
   const { data, error } = await supabase
     .from('profiles')
-    .select('username, full_name, avatar_url')
+    .select('id, username, full_name, avatar_url')
     .or(`username.ilike.%${trimmed}%,full_name.ilike.%${trimmed}%`)
     .limit(20)
 

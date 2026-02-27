@@ -76,7 +76,8 @@ export default async function ProfilePage({
     .select(`
       *,
       campgrounds(*),
-      photos(*)
+      photos(*),
+      journal_entry_tags(tagged_user_id, profiles!tagged_user_id(username, avatar_url))
     `)
     .eq('user_id', profile.id)
     .eq('status', 'published')
@@ -306,12 +307,37 @@ export default async function ProfilePage({
                     </Link>
                   )}
 
-                  {/* Location */}
-                  {entry.campgrounds?.address && (() => {
-                    const location = parseCityState(entry.campgrounds.address)
-                    return location ? (
-                      <p className="text-xs text-gray-400 mt-0.5 mb-2">📍 {location}</p>
-                    ) : null
+                  {/* Location + tagged users */}
+                  {(() => {
+                    const location = entry.campgrounds?.address ? parseCityState(entry.campgrounds.address) : null
+                    const tags = (entry.journal_entry_tags as Array<{ profiles: { username: string, avatar_url: string | null } }> | null) ?? []
+                    if (!location && tags.length === 0) return null
+                    return (
+                      <div className="flex items-center justify-between mt-0.5 mb-2 gap-2">
+                        {location ? (
+                          <p className="text-xs text-gray-400">📍 {location}</p>
+                        ) : <span />}
+                        {tags.length > 0 && (
+                          <div className="flex items-center gap-1 flex-shrink-0">
+                            <span className="text-xs text-gray-400">with</span>
+                            {tags.slice(0, 5).map((tag) => {
+                              const p = tag.profiles
+                              return p.avatar_url ? (
+                                <Link key={p.username} href={`/profile/${p.username}`} title={`@${p.username}`}>
+                                  <img src={p.avatar_url} alt={p.username} className="w-5 h-5 rounded-full object-cover" />
+                                </Link>
+                              ) : (
+                                <Link key={p.username} href={`/profile/${p.username}`} title={`@${p.username}`}>
+                                  <div className="w-5 h-5 rounded-full bg-brand text-white flex items-center justify-center text-xs font-bold">
+                                    {p.username[0].toUpperCase()}
+                                  </div>
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )
                   })()}
 
                   {/* Dates */}

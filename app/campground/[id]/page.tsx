@@ -247,25 +247,6 @@ export default async function CampgroundDetailPage({
             </div>
           </div>
         )}
-
-        {campground && journalEntries.length === 0 && (
-          <div className="bg-gray-100 rounded-card p-6 text-gray-600">
-            <p className="font-bold text-center mb-4">🔍 Debug: Journal Entry Query</p>
-            <div className="text-sm space-y-2">
-              <p>Database campground ID: <code className="bg-white px-2 py-1 rounded">{campground.id}</code></p>
-              <p>Published entries found: <code className="bg-white px-2 py-1 rounded">{journalEntries.length}</code></p>
-              <p>All entries (any status): <code className="bg-white px-2 py-1 rounded">{allEntries.length}</code></p>
-              {allEntries.length > 0 && (
-                <div className="mt-3">
-                  <p className="font-bold mb-1">Entries in database:</p>
-                  <pre className="text-xs bg-white p-2 rounded overflow-auto">
-                    {JSON.stringify(allEntries, null, 2)}
-                  </pre>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )

@@ -19,13 +19,14 @@ export default async function EditJournalEntryPage({
     redirect('/login')
   }
 
-  // Fetch the entry with campground and photos
+  // Fetch the entry with campground, photos, and tags
   const { data: entry } = await supabase
     .from('journal_entries')
     .select(`
       *,
       campgrounds(name),
-      photos(id, storage_path)
+      photos(id, storage_path),
+      journal_entry_tags(tagged_user_id, profiles!tagged_user_id(username, full_name, avatar_url))
     `)
     .eq('id', id)
     .single()
@@ -47,6 +48,13 @@ export default async function EditJournalEntryPage({
     .single()
 
   const username = profile?.username ?? ''
+
+  const existingTaggedUsers = ((entry as any).journal_entry_tags ?? []).map((t: any) => ({
+    id: t.tagged_user_id,
+    username: t.profiles.username,
+    full_name: t.profiles.full_name,
+    avatar_url: t.profiles.avatar_url,
+  }))
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -80,6 +88,7 @@ export default async function EditJournalEntryPage({
             entry={entry}
             username={username}
             supabaseUrl={process.env.NEXT_PUBLIC_SUPABASE_URL!}
+            existingTaggedUsers={existingTaggedUsers}
           />
         </div>
       </div>

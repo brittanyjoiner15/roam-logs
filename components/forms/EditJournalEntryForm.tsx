@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { updateJournalEntry } from '@/actions/journal'
+import UserTagInput, { type TaggedUser } from '@/components/UserTagInput'
 
 type ExistingPhoto = {
   id: string
@@ -20,12 +21,14 @@ type EditJournalEntryFormProps = {
   }
   username: string
   supabaseUrl: string
+  existingTaggedUsers: TaggedUser[]
 }
 
 export default function EditJournalEntryForm({
   entry,
   username,
   supabaseUrl,
+  existingTaggedUsers,
 }: EditJournalEntryFormProps) {
   const [startDate, setStartDate] = useState(entry.start_date)
   const [endDate, setEndDate] = useState(entry.end_date)
@@ -39,6 +42,7 @@ export default function EditJournalEntryForm({
   // New photos to add
   const [newPhotos, setNewPhotos] = useState<File[]>([])
 
+  const [taggedUsers, setTaggedUsers] = useState<TaggedUser[]>(existingTaggedUsers)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -67,6 +71,7 @@ export default function EditJournalEntryForm({
     formData.append('notes', notes)
     formData.append('status', status)
 
+    taggedUsers.forEach((u) => formData.append('tagged_user_ids', u.id))
     removedPhotoIds.forEach((id) => formData.append('delete_photo_ids', id))
     newPhotos.forEach((photo) => formData.append('photos', photo))
     const result = await updateJournalEntry(formData)
@@ -126,6 +131,9 @@ export default function EditJournalEntryForm({
         </div>
       </div>
 
+      {/* Tag friends */}
+      <UserTagInput value={taggedUsers} onChange={setTaggedUsers} />
+
       {/* Notes */}
       <div>
         <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
@@ -144,20 +152,19 @@ export default function EditJournalEntryForm({
       {/* Status */}
       <div>
         <p className="text-sm font-medium text-gray-700 mb-2">Visibility</p>
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           {(['published', 'draft'] as const).map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={() => setStatus(s)}
-              className={`flex-1 py-2 px-4 rounded-button text-sm font-medium border transition-colors ${
-                status === s
-                  ? 'bg-brand text-white border-brand'
-                  : 'bg-white text-gray-600 border-gray-300 hover:border-brand'
-              }`}
-            >
-              {s === 'published' ? 'Published' : 'Draft'}
-            </button>
+            <label key={s} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="visibility"
+                value={s}
+                checked={status === s}
+                onChange={() => setStatus(s)}
+                className="accent-brand"
+              />
+              <span className="text-sm text-gray-700">{s === 'published' ? 'Published' : 'Draft'}</span>
+            </label>
           ))}
         </div>
       </div>
