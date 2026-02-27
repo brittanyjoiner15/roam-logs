@@ -185,6 +185,68 @@ export default async function ProfilePage({
           )}
         </div>
 
+        {/* Onboarding Checklist — own profile, no journal entries yet */}
+        {isOwnProfile && entries.length === 0 && (() => {
+          const profileDone = !!(profile.avatar_url || profile.bio)
+          const followDone = (followingCount ?? 0) > 0
+          const steps = [
+            {
+              label: 'Edit your profile',
+              hint: 'Add a photo or bio',
+              done: profileDone,
+              href: `/profile/${profile.username}/edit`,
+            },
+            {
+              label: 'Follow someone',
+              hint: 'Find other campers',
+              done: followDone,
+              href: '/feed',
+            },
+            {
+              label: 'Log a journal entry',
+              hint: 'Search for your last campground to add an entry',
+              done: false,
+              href: '/search',
+            },
+          ]
+          const completedCount = steps.filter((s) => s.done).length
+          return (
+            <div className="bg-white rounded-card shadow-card p-4 mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-sm font-semibold text-ink">Get started</p>
+                <p className="text-xs text-gray-400">{completedCount} / {steps.length} done</p>
+              </div>
+              <div className="space-y-2">
+                {steps.map((step) => (
+                  step.done ? (
+                    <div key={step.label} className="flex items-center gap-3 py-2">
+                      <div className="w-5 h-5 rounded-full bg-brand flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-400 line-through">{step.label}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <Link key={step.label} href={step.href} className="flex items-center gap-3 py-2 group">
+                      <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex-shrink-0 group-hover:border-brand transition-colors" />
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-ink group-hover:text-brand transition-colors">{step.label}</p>
+                        <p className="text-xs text-gray-400">{step.hint}</p>
+                      </div>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-300 group-hover:text-brand transition-colors ml-auto flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </Link>
+                  )
+                ))}
+              </div>
+            </div>
+          )
+        })()}
+
         {/* Journal Entries */}
         <h2 className="text-lg font-bold text-ink mb-3">
           Trips {entries.length > 0 && <span className="text-gray-400 font-normal">({entries.length})</span>}
