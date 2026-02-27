@@ -4,6 +4,18 @@ import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import mixpanel from 'mixpanel-browser'
 
+function getBasePath(pathname:string ) {
+  try {
+    const segments = pathname
+      .split("/")
+      .filter(Boolean); // remove empty segments
+
+    return segments.length ? segments[0] : null;
+  } catch (err) {
+    return null;
+  }
+}
+
 mixpanel.init('3ced240d82f2ac96a64b53459597daca', {
   record_sessions_percent: 100,
 })
@@ -30,7 +42,10 @@ export default function MixpanelProvider({ userId }: MixpanelProviderProps) {
   }, [userId])
 
   useEffect(() => {
-    mixpanel.track('Page View', { page: pathname })
+    mixpanel.track('Page View', { 
+      page: pathname,
+      base_path: getBasePath(pathname),
+    })
   }, [pathname])
 
   return null

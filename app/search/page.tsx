@@ -286,6 +286,7 @@ export default function SearchPage() {
               {FEATURED_CAMPGROUNDS.map((cg) => (
                 <Link
                   key={cg.placeId}
+                  onClick={() => mixpanel.track("Featured Campground Clicked", { place_id: cg.placeId, name: cg.name })}
                   href={`/campground/${cg.placeId}`}
                   className="flex items-center gap-3 bg-white rounded-card shadow-card p-3 hover:shadow-md transition-shadow"
                 >

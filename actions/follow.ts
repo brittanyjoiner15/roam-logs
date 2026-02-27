@@ -2,6 +2,9 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import Mixpanel from 'mixpanel'
+
+const mixpanel = Mixpanel.init(process.env.MIXPANEL_TOKEN!);
 
 export async function followUser(followingId: string, username: string) {
   const supabase = await createClient()
@@ -23,6 +26,10 @@ export async function followUser(followingId: string, username: string) {
     return { error: error.message }
   }
 
+  mixpanel.track('Follow User', {
+    following_id: followingId,
+  });
+  
   revalidatePath(`/profile/${username}`)
   return { success: true }
 }
