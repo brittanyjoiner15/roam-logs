@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import FollowButton from '@/components/FollowButton'
 import DeleteEntryButton from '@/components/DeleteEntryButton'
-import { logout } from '@/actions/auth'
+import ProfileMenuButton from '@/components/ProfileMenuButton'
 
 export default async function ProfilePage({
   params,
@@ -134,20 +134,7 @@ export default async function ProfilePage({
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                       </svg>
                     </Link>
-                    <form action={logout}>
-                      <button
-                        type="submit"
-                        className="p-2 rounded-button border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
-                        title="Log out"
-                      >
-                        {/* Logout icon */}
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                          <polyline points="16 17 21 12 16 7"/>
-                          <line x1="21" y1="12" x2="9" y2="12"/>
-                        </svg>
-                      </button>
-                    </form>
+                    <ProfileMenuButton />
                   </div>
                 )}
               </div>
