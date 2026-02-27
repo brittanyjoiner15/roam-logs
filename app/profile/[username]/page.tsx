@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
+import { parseCityState } from '@/lib/utils'
 import FollowButton from '@/components/FollowButton'
 import DeleteEntryButton from '@/components/DeleteEntryButton'
 import ProfileMenuButton from '@/components/ProfileMenuButton'
@@ -292,11 +293,12 @@ export default async function ProfilePage({
                   )}
 
                   {/* Location */}
-                  {entry.campgrounds?.formatted_address && (
-                    <p className="text-xs text-gray-400 mt-0.5 mb-2">
-                      📍 {entry.campgrounds.formatted_address}
-                    </p>
-                  )}
+                  {entry.campgrounds?.address && (() => {
+                    const location = parseCityState(entry.campgrounds.address)
+                    return location ? (
+                      <p className="text-xs text-gray-400 mt-0.5 mb-2">📍 {location}</p>
+                    ) : null
+                  })()}
 
                   {/* Dates */}
                   <p className="text-xs text-gray-400 mb-3">

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import SuggestedFollowers from '@/components/SuggestedFollowers'
 import PhotoCarousel from '@/components/PhotoCarousel'
+import { parseCityState } from '@/lib/utils'
 
 const SUGGESTED_USERNAMES = ['VeeWhy', 'britt', 'merylvdm']
 
@@ -127,11 +128,19 @@ export default async function FeedPage() {
                     {entry.campgrounds && (
                       <Link
                         href={`/campground/${entry.campgrounds.google_place_id}`}
-                        className="font-bold text-ink hover:text-brand transition-colors block mb-1"
+                        className="font-bold text-ink hover:text-brand transition-colors block leading-snug"
                       >
                         {entry.campgrounds.name}
                       </Link>
                     )}
+
+                    {/* City, State */}
+                    {entry.campgrounds?.address && (() => {
+                      const location = parseCityState(entry.campgrounds.address)
+                      return location ? (
+                        <p className="text-xs text-gray-400 mt-0.5 mb-2">📍 {location}</p>
+                      ) : null
+                    })()}
 
                     {/* Dates */}
                     <p className="text-xs text-gray-500 mb-2">
