@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
+import SuggestedFollowers from '@/components/SuggestedFollowers'
+
+const SUGGESTED_USERNAMES = ['VeeWhy', 'britt', 'merylvdm']
 
 export default async function FeedPage() {
   const supabase = await createClient()
@@ -21,6 +24,17 @@ export default async function FeedPage() {
     .eq('follower_id', user.id)
 
   const followingIds = following?.map((f) => f.following_id) ?? []
+
+  // Fetch suggested profiles, excluding ones already followed and the current user
+  const { data: suggestedProfiles } = await supabase
+    .from('profiles')
+    .select('id, username, full_name, avatar_url')
+    .in('username', SUGGESTED_USERNAMES)
+    .neq('id', user.id)
+
+  const suggestions = (suggestedProfiles ?? []).filter(
+    (p) => !followingIds.includes(p.id)
+  )
 
   // If not following anyone, skip the entries query
   let entries: any[] = []
@@ -47,6 +61,7 @@ export default async function FeedPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="max-w-lg mx-auto px-4 pt-6">
+        {suggestions.length > 0 && <SuggestedFollowers profiles={suggestions} />}
         {entries.length === 0 ? (
           <div className="bg-white rounded-card shadow-card p-8 text-center text-gray-500">
             <p className="text-4xl mb-3">🏕️</p>
