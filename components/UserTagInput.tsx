@@ -19,7 +19,7 @@ export default function UserTagInput({ value, onChange }: Props) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TaggedUser[]>([])
   const [showDropdown, setShowDropdown] = useState(false)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
