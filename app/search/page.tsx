@@ -8,6 +8,50 @@ import mixpanel from 'mixpanel-browser'
 
 type Tab = 'campgrounds' | 'people'
 
+type FeaturedCampground = {
+  name: string
+  photo: string
+  city: string
+  state: string
+  description: string
+  placeId: string
+}
+
+const FEATURED_CAMPGROUNDS: FeaturedCampground[] = [
+  {
+    name: 'Raccoon Valley RV Park',
+    photo: 'https://raccoonrv.com/wp-content/uploads/2024/12/Untitled-4-1.png',
+    city: 'Knoxville',
+    state: 'TN',
+    description: 'Central Knoxville location with everything you need an amazing price. Friendly and helpful staff.',
+    placeId: 'ChIJmR4BILk4XIgRGhBViRGHol0',
+  },
+  {
+    name: 'Little River Campground',
+    photo: 'https://scontent.fric1-2.fna.fbcdn.net/v/t39.30808-6/304890396_480330280769978_3492528433453356650_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=h3qCjY9sMzIQ7kNvwHoDIjF&_nc_oc=AdneZCIaM2jsy-acjFXyhW06kICYv2QKH6Zefb-Ci0zBwsmA2SaWtFmb6EDcijP_Bd0&_nc_zt=23&_nc_ht=scontent.fric1-2.fna&_nc_gid=a92VN1a57_d3hcVstYQm9A&oh=00_AfvaDQ6tsY0is_VVgMT4Ra6s5UXRQN3wVyQMRfmNAWTKtw&oe=69A6BE63',
+    city: 'Townsend',
+    state: 'TN',
+    description: 'Absolutely gorgoeus campground right on the river, and balconies at riverside spots! Easy access to the Smoky Mountains.',
+    placeId: 'ChIJYUChOYKnXogRNqTYiYbG-0Y',
+  },
+  {
+    name: 'Whispering Hills RV Resort',
+    photo: 'https://scontent.fric1-1.fna.fbcdn.net/v/t39.30808-1/305492796_1050849682413861_5038824533929058178_n.jpg?stp=dst-jpg_s480x480_tt6&_nc_cat=108&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=Ulcqfep5ZiwQ7kNvwG5Lu0d&_nc_oc=AdlFUo3fIK8XvYRcAYsm9pzGt2tK3wRILhcK5BtcwquaWFLf-DqJrPupi6-jijTG-i0&_nc_zt=24&_nc_ht=scontent.fric1-1.fna&_nc_gid=sqUl7N6Sht8MG6gdRM9ZKA&oh=00_Afunog97cLsQZZ-9X7BdtWOcDGkuaf2dPsW4aS5yi8c3SA&oe=69A6AE49',
+    city: 'Georgetown',
+    state: 'KY',
+    description: 'Just north of Lexington, KY, this beautiful location is spacious, has spots on the water, and all the amenenities.',
+    placeId: 'ChIJcZk_bEw8QogRs9Oa2h1J40U',
+  },
+  {
+    name: 'Americamps RV Resort',
+    photo: 'https://scontent.fric1-2.fna.fbcdn.net/v/t39.30808-1/511035031_122100449870921130_3780170022025541643_n.jpg?stp=c54.0.1939.1939a_dst-jpg_s480x480_tt6&_nc_cat=111&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=ImDZLlCdKwUQ7kNvwGlQFHG&_nc_oc=Adk-ugGr7ZoK8Ubjkr13r-vqaJ64RkyY1aR-cmubDJ26mllySpKDJpPVl10AIrkqHtk&_nc_zt=24&_nc_ht=scontent.fric1-2.fna&_nc_gid=FrODymjdEZP_UygHCENmhA&oh=00_AfsSQdGaIMZN1uQcu7C5YsPYxUEYGYPHky2iBMETjMsmXw&oe=69A6BDBA',
+    city: 'Ashland',
+    state: 'VA',
+    description: 'Resort-style campground with full amenities (dog park, gym, pickleball and basketball courts, pool, and more!',
+    placeId: 'ChIJZ9e0P2s8sYkRtFPSv9nMbRE',
+  },
+]
+
 type UserResult = {
   username: string
   full_name: string | null
@@ -229,6 +273,33 @@ export default function SearchPage() {
             </div>
           )}
         </div>
+
+        {/* Featured Campgrounds */}
+        {!query.trim() && (
+          <div className="mb-6">
+            <p className="text-sm font-semibold text-ink mb-3">Featured Campgrounds</p>
+            <div className="space-y-3">
+              {FEATURED_CAMPGROUNDS.map((cg) => (
+                <Link
+                  key={cg.placeId}
+                  href={`/campground/${cg.placeId}`}
+                  className="flex items-center gap-3 bg-white rounded-card shadow-card p-3 hover:shadow-md transition-shadow"
+                >
+                  <img
+                    src={cg.photo}
+                    alt={cg.name}
+                    className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                  />
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-ink">{cg.name}</p>
+                    <p className="text-xs text-gray-400 mb-1">{cg.city}, {cg.state}</p>
+                    <p className="text-xs text-gray-500">{cg.description}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Error */}
         {error && (
