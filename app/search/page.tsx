@@ -126,23 +126,30 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="max-w-lg mx-auto px-4 pt-6">
-        <h1 className="text-xl font-bold text-ink mb-5">Search</h1>
-
-        {/* Tab toggle */}
-        <div className="flex gap-2 mb-4">
+        
+        {/* Filter toggle */}
+        <div className="flex items-center gap-5 mb-4">
           {(['campgrounds', 'people'] as Tab[]).map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => handleTabChange(t)}
-              className={`flex-1 py-2 px-4 rounded-button text-sm font-medium border transition-colors ${
-                tab === t
-                  ? 'bg-brand text-white border-brand'
-                  : 'bg-white text-gray-600 border-gray-300 hover:border-brand'
-              }`}
-            >
-              {t === 'campgrounds' ? 'Campgrounds' : 'People'}
-            </button>
+            <label key={t} className="flex items-center gap-2 cursor-pointer select-none">
+              <span
+                className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                  tab === t ? 'border-brand' : 'border-gray-400'
+                }`}
+              >
+                {tab === t && <span className="w-2 h-2 rounded-full bg-brand block" />}
+              </span>
+              <input
+                type="radio"
+                name="searchType"
+                value={t}
+                checked={tab === t}
+                onChange={() => handleTabChange(t)}
+                className="sr-only"
+              />
+              <span className={`text-sm font-medium transition-colors ${tab === t ? 'text-ink' : 'text-gray-400'}`}>
+                {t === 'campgrounds' ? 'Campgrounds' : 'People'}
+              </span>
+            </label>
           ))}
         </div>
 

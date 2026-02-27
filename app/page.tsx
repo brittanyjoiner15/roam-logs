@@ -143,8 +143,7 @@ export default async function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-ink mb-2">
-                See Your Journey{' '}
-                <span className="text-sm font-medium text-pine/70">· coming soon</span>
+                See Your Journey on a Map
               </h3>
               <p className="text-gray-600 text-base leading-relaxed">
                 Watch your travels come alive on a map. Every logged campsite

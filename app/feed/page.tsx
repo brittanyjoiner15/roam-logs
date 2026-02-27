@@ -47,8 +47,6 @@ export default async function FeedPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="max-w-lg mx-auto px-4 pt-6">
-        <h1 className="text-xl font-bold text-ink mb-5">Feed</h1>
-
         {entries.length === 0 ? (
           <div className="bg-white rounded-card shadow-card p-8 text-center text-gray-500">
             <p className="text-4xl mb-3">🏕️</p>
