@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import FollowButton from '@/components/FollowButton'
 import DeleteEntryButton from '@/components/DeleteEntryButton'
 import ProfileMenuButton from '@/components/ProfileMenuButton'
+import PhotoCarousel from '@/components/PhotoCarousel'
 
 export default async function ProfilePage({
   params,
@@ -268,68 +269,63 @@ export default async function ProfilePage({
         ) : (
           <div className="space-y-4">
             {entries.map((entry: any) => (
-              <div key={entry.id} className="bg-white rounded-card shadow-card p-4">
-                {/* Campground name */}
-                {entry.campgrounds && (
-                  <Link
-                    href={`/campground/${entry.campgrounds.google_place_id}`}
-                    className="font-bold text-ink hover:text-brand transition-colors block mb-1"
-                  >
-                    {entry.campgrounds.name}
-                  </Link>
-                )}
+              <div key={entry.id} className="bg-white rounded-card shadow-card overflow-hidden border border-gray-100">
 
-                {/* Dates */}
-                <p className="text-sm text-gray-500 mb-3">
-                  📅 {format(new Date(entry.start_date), 'MMM d, yyyy')}
-                  {entry.end_date !== entry.start_date && (
-                    <> – {format(new Date(entry.end_date), 'MMM d, yyyy')}</>
-                  )}
-                </p>
-
-                {/* Notes */}
-                {entry.notes && (
-                  <p className="text-gray-700 text-sm mb-3 whitespace-pre-wrap line-clamp-4">
-                    {entry.notes}
-                  </p>
-                )}
-
-                {/* Photos */}
+                {/* Photos — swipeable carousel */}
                 {entry.photos && entry.photos.length > 0 && (
-                  <div className="grid grid-cols-2 gap-2">
-                    {entry.photos.map((photo: any) => {
-                      const photoUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/campground-photos/${photo.storage_path}`
-                      return (
-                        <img
-                          key={photo.id}
-                          src={photoUrl}
-                          alt={photo.caption || 'Campground photo'}
-                          className="w-full h-40 object-cover rounded"
-                        />
-                      )
-                    })}
-                  </div>
+                  <PhotoCarousel
+                    photos={entry.photos}
+                    supabaseUrl={process.env.NEXT_PUBLIC_SUPABASE_URL!}
+                  />
                 )}
 
-                {/* Address */}
-                {entry.campgrounds?.formatted_address && (
-                  <p className="text-xs text-gray-400 mt-3">
-                    📍 {entry.campgrounds.formatted_address}
-                  </p>
-                )}
-
-                {/* Edit / Delete — only visible on own profile */}
-                {isOwnProfile && (
-                  <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100">
+                {/* Card body */}
+                <div className="p-4">
+                  {/* Campground name */}
+                  {entry.campgrounds && (
                     <Link
-                      href={`/journal-entry/${entry.id}/edit`}
-                      className="text-sm text-gray-400 hover:text-brand transition-colors"
+                      href={`/campground/${entry.campgrounds.google_place_id}`}
+                      className="font-bold text-ink hover:text-brand transition-colors block leading-snug"
                     >
-                      Edit
+                      {entry.campgrounds.name}
                     </Link>
-                    <DeleteEntryButton entryId={entry.id} username={profile.username} />
-                  </div>
-                )}
+                  )}
+
+                  {/* Location */}
+                  {entry.campgrounds?.formatted_address && (
+                    <p className="text-xs text-gray-400 mt-0.5 mb-2">
+                      📍 {entry.campgrounds.formatted_address}
+                    </p>
+                  )}
+
+                  {/* Dates */}
+                  <p className="text-xs text-gray-400 mb-3">
+                    📅 {format(new Date(entry.start_date), 'MMM d, yyyy')}
+                    {entry.end_date !== entry.start_date && (
+                      <> – {format(new Date(entry.end_date), 'MMM d, yyyy')}</>
+                    )}
+                  </p>
+
+                  {/* Notes */}
+                  {entry.notes && (
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-4">
+                      {entry.notes}
+                    </p>
+                  )}
+
+                  {/* Edit / Delete — only visible on own profile */}
+                  {isOwnProfile && (
+                    <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100">
+                      <Link
+                        href={`/journal-entry/${entry.id}/edit`}
+                        className="text-sm text-gray-400 hover:text-brand transition-colors"
+                      >
+                        Edit
+                      </Link>
+                      <DeleteEntryButton entryId={entry.id} username={profile.username} />
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>

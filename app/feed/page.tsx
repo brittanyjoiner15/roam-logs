@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import SuggestedFollowers from '@/components/SuggestedFollowers'
+import PhotoCarousel from '@/components/PhotoCarousel'
 
 const SUGGESTED_USERNAMES = ['VeeWhy', 'britt', 'merylvdm']
 
@@ -117,19 +118,7 @@ export default async function FeedPage() {
 
                   {/* Photos */}
                   {entry.photos && entry.photos.length > 0 && (
-                    <div className="grid grid-cols-2 gap-0.5">
-                      {entry.photos.map((photo: any) => {
-                        const photoUrl = `${supabaseUrl}/storage/v1/object/public/campground-photos/${photo.storage_path}`
-                        return (
-                          <img
-                            key={photo.id}
-                            src={photoUrl}
-                            alt={photo.caption || 'Campground photo'}
-                            className="w-full h-48 object-cover"
-                          />
-                        )
-                      })}
-                    </div>
+                    <PhotoCarousel photos={entry.photos} supabaseUrl={supabaseUrl} />
                   )}
 
                   {/* Content */}
