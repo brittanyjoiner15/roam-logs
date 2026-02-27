@@ -64,6 +64,18 @@ export async function updateProfile(formData: FormData) {
   redirect(`/profile/${username}`)
 }
 
+export async function touchLastActive() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase
+    .from('profiles')
+    .update({ last_active_at: new Date().toISOString() })
+    .eq('id', user.id)
+}
+
 export async function searchUsers(query: string) {
   const supabase = await createClient()
 

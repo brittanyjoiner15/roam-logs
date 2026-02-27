@@ -26,6 +26,7 @@ export type Profile = {
   website: string | null
   rig_type: RigType | null
   rig_name: string | null
+  last_active_at: string | null
   created_at: string
   updated_at: string
 }

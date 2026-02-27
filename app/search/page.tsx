@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { searchCampgrounds } from '@/actions/campground'
-import { searchUsers } from '@/actions/profile'
+import { searchUsers, touchLastActive } from '@/actions/profile'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
 
@@ -60,6 +60,10 @@ type UserResult = {
 
 export default function SearchPage() {
   const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    void touchLastActive()
+  }, [])
 
   const [tab, setTab] = useState<Tab>('campgrounds')
   const [query, setQuery] = useState('')
