@@ -73,16 +73,21 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
       formData.append('photos', photo)
     })
 
-    const result = await createJournalEntry(formData)
+    try {
+      const result = await createJournalEntry(formData)
 
-    if (result?.error) {
-      setError(result.error)
-      setLoading(false)
-    }
+      if (result?.error) {
+        setError(result.error)
+        setLoading(false)
+        return
+      }
 
-    if (!result?.error) {
-      setLoading(false)
       window.location.reload()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      mixpanel.track('Journal Entry Error', { campground: campground.name, error: message })
+      setError('Something went wrong uploading your entry. Please try again.')
+      setLoading(false)
     }
   }
 
