@@ -96,7 +96,7 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error'
       mixpanel.track('Journal Entry Error', { campground: campground.name, error: message })
-      setError('Something went wrong uploading your entry. Please try again.')
+      setError(`Something went wrong uploading your entry. Please try again. (${message})`)
       setCompressing(false)
       setLoading(false)
     }
