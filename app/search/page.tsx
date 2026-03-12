@@ -19,28 +19,12 @@ type FeaturedCampground = {
 
 const FEATURED_CAMPGROUNDS: FeaturedCampground[] = [
   {
-    name: 'Raccoon Valley RV Park',
-    photo: 'https://raccoonrv.com/wp-content/uploads/2024/12/Untitled-4-1.png',
-    city: 'Knoxville',
-    state: 'TN',
-    description: 'Central Knoxville location with everything you need an amazing price. Friendly and helpful staff.',
-    placeId: 'ChIJmR4BILk4XIgRGhBViRGHol0',
-  },
-  {
     name: 'Little River Campground',
     photo: 'https://scontent.fric1-2.fna.fbcdn.net/v/t39.30808-6/304890396_480330280769978_3492528433453356650_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=h3qCjY9sMzIQ7kNvwHoDIjF&_nc_oc=AdneZCIaM2jsy-acjFXyhW06kICYv2QKH6Zefb-Ci0zBwsmA2SaWtFmb6EDcijP_Bd0&_nc_zt=23&_nc_ht=scontent.fric1-2.fna&_nc_gid=a92VN1a57_d3hcVstYQm9A&oh=00_AfvaDQ6tsY0is_VVgMT4Ra6s5UXRQN3wVyQMRfmNAWTKtw&oe=69A6BE63',
     city: 'Townsend',
     state: 'TN',
     description: 'Absolutely gorgoeus campground right on the river, and balconies at riverside spots! Easy access to the Smoky Mountains.',
     placeId: 'ChIJYUChOYKnXogRNqTYiYbG-0Y',
-  },
-  {
-    name: 'Whispering Hills RV Resort',
-    photo: 'https://scontent.fric1-1.fna.fbcdn.net/v/t39.30808-1/305492796_1050849682413861_5038824533929058178_n.jpg?stp=dst-jpg_s480x480_tt6&_nc_cat=108&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=Ulcqfep5ZiwQ7kNvwG5Lu0d&_nc_oc=AdlFUo3fIK8XvYRcAYsm9pzGt2tK3wRILhcK5BtcwquaWFLf-DqJrPupi6-jijTG-i0&_nc_zt=24&_nc_ht=scontent.fric1-1.fna&_nc_gid=sqUl7N6Sht8MG6gdRM9ZKA&oh=00_Afunog97cLsQZZ-9X7BdtWOcDGkuaf2dPsW4aS5yi8c3SA&oe=69A6AE49',
-    city: 'Georgetown',
-    state: 'KY',
-    description: 'Just north of Lexington, KY, this beautiful location is spacious, has spots on the water, and all the amenenities.',
-    placeId: 'ChIJcZk_bEw8QogRs9Oa2h1J40U',
   },
   {
     name: 'Americamps RV Resort',

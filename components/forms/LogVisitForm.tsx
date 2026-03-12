@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createJournalEntry } from '@/actions/journal'
-import { set } from 'date-fns'
+import imageCompression from 'browser-image-compression'
 import mixpanel from 'mixpanel-browser'
 import UserTagInput, { type TaggedUser } from '@/components/UserTagInput'
 
@@ -31,6 +31,7 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
   const [photos, setPhotos] = useState<File[]>([])
   const [taggedUsers, setTaggedUsers] = useState<TaggedUser[]>([])
   const [loading, setLoading] = useState(false)
+  const [compressing, setCompressing] = useState(false)
   const [error, setError] = useState('')
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,12 +69,21 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
     // Add tagged users
     taggedUsers.forEach((u) => formData.append('tagged_user_ids', u.id))
 
-    // Add photos
-    photos.forEach((photo) => {
-      formData.append('photos', photo)
-    })
-
     try {
+      // Compress and add photos
+      if (photos.length > 0) {
+        setCompressing(true)
+        for (const photo of photos) {
+          const compressed = await imageCompression(photo, {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+          })
+          formData.append('photos', compressed, photo.name)
+        }
+        setCompressing(false)
+      }
+
       const result = await createJournalEntry(formData)
 
       if (result?.error) {
@@ -87,6 +97,7 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
       const message = err instanceof Error ? err.message : 'Unknown error'
       mixpanel.track('Journal Entry Error', { campground: campground.name, error: message })
       setError('Something went wrong uploading your entry. Please try again.')
+      setCompressing(false)
       setLoading(false)
     }
   }
@@ -194,10 +205,10 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
       {/* Submit */}
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || compressing}
         className="w-full bg-brand text-white py-3 px-6 rounded-button hover:bg-brand/90 transition-colors font-medium text-lg disabled:opacity-50"
       >
-        {loading ? 'Saving...' : 'Save to Journal'}
+        {compressing ? 'Compressing photos...' : loading ? 'Saving...' : 'Save to Journal'}
       </button>
     </form>
   )
