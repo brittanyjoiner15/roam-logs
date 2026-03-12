@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   images: {
     domains: ["lh3.googleusercontent.com"], // For Google profile images
     remotePatterns: [
@@ -9,13 +9,5 @@ const nextConfig = {
         pathname: "/storage/v1/object/public/**",
       },
     ],
-  },
-};
-
-module.exports = {
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "30mb",
-    },
   },
 };

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createJournalEntry } from '@/actions/journal'
+import { createClient } from '@/lib/supabase/client'
 import imageCompression from 'browser-image-compression'
 import mixpanel from 'mixpanel-browser'
 import UserTagInput, { type TaggedUser } from '@/components/UserTagInput'
@@ -70,16 +71,30 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
     taggedUsers.forEach((u) => formData.append('tagged_user_ids', u.id))
 
     try {
-      // Compress and add photos
+      // Compress and upload photos directly to Supabase Storage
       if (photos.length > 0) {
         setCompressing(true)
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+
         for (const photo of photos) {
           const compressed = await imageCompression(photo, {
             maxSizeMB: 1,
             maxWidthOrHeight: 1920,
             useWebWorker: true,
           })
-          formData.append('photos', compressed, photo.name)
+
+          const timestamp = Date.now()
+          const storagePath = `${user!.id}/${campground.googlePlaceId}/${timestamp}-${photo.name}`
+
+          await supabase.storage
+            .from('campground-photos')
+            .upload(storagePath, compressed, { contentType: photo.type, upsert: false })
+
+          const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/campground-photos/${storagePath}`
+
+          formData.append('photo_paths', storagePath)
+          formData.append('photo_urls', publicUrl)
         }
         setCompressing(false)
       }

@@ -24,7 +24,8 @@ export async function createJournalEntry(formData: FormData) {
   const endDate = formData.get('endDate') as string
   const notes = formData.get('notes') as string
   const status = formData.get('status') as 'published' | 'draft'
-  const photos = formData.getAll('photos') as File[]
+  const photoPaths = formData.getAll('photo_paths') as string[]
+  const photoUrls = formData.getAll('photo_urls') as string[]
   const taggedUserIds = formData.getAll('tagged_user_ids') as string[]
 
   // Find or create campground
@@ -84,46 +85,17 @@ export async function createJournalEntry(formData: FormData) {
     )
   }
 
-  // Upload photos if any
-  if (photos.length > 0 && journalEntry) {
-
-    for (let i = 0; i < photos.length; i++) {
-      const photo = photos[i]
-
-      // Skip empty files
-      if (photo.size === 0) {
-        continue
-      }
-
-      const timestamp = Date.now()
-      const filename = `${timestamp}-${photo.name}`
-      const storagePath = `${user.id}/${campground.id}/${filename}`
-
-      // Upload to Supabase Storage
-      const { error: uploadError } = await supabase.storage
-        .from('campground-photos')
-        .upload(storagePath, photo, {
-          contentType: photo.type,
-          upsert: false,
-        })
-
-      if (uploadError) {
-        console.error('Error uploading photo:', uploadError)
-        continue // Skip this photo but continue with others
-      }
-
-      // Construct public URL
-      const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/campground-photos/${storagePath}`
-
-      // Create photo record in database
+  // Save photo records (photos already uploaded to storage client-side)
+  if (photoPaths.length > 0 && journalEntry) {
+    for (let i = 0; i < photoPaths.length; i++) {
       const { error: photoError } = await supabase
         .from('photos')
         .insert({
           user_id: user.id,
           journal_entry_id: journalEntry.id,
           campground_id: campground.id,
-          storage_path: storagePath,
-          public_url: publicUrl,
+          storage_path: photoPaths[i],
+          public_url: photoUrls[i],
         })
 
       if (photoError) {
