@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createJournalEntry } from '@/actions/journal'
 import { createClient } from '@/lib/supabase/client'
 import imageCompression from 'browser-image-compression'
@@ -34,6 +34,26 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
   const [loading, setLoading] = useState(false)
   const [compressing, setCompressing] = useState(false)
   const [error, setError] = useState('')
+
+  const campingMessages = [
+    'Checking the propane tanks...',
+    'Dumping the black tank...',
+    'Backing into the campsite...',
+    'Filling the fresh water tank...',
+    'Setting up the Starlink...',
+  ]
+  const [msgIndex, setMsgIndex] = useState(0)
+
+  useEffect(() => {
+    if (!compressing) {
+      setMsgIndex(0)
+      return
+    }
+    const interval = setInterval(() => {
+      setMsgIndex(i => (i + 1) % campingMessages.length)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [compressing])
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
@@ -223,8 +243,29 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
         disabled={loading || compressing}
         className="w-full bg-brand text-white py-3 px-6 rounded-button hover:bg-brand/90 transition-colors font-medium text-lg disabled:opacity-50"
       >
-        {compressing ? 'Compressing photos...' : loading ? 'Saving...' : 'Save to Journal'}
+        {compressing ? campingMessages[msgIndex] : loading ? 'Saving...' : 'Save to Journal'}
       </button>
+
+      {compressing && (
+        <div className="overflow-hidden relative h-16 mt-2">
+          <style>{`
+            @keyframes driveRV {
+              0%   { transform: translateX(-120px); }
+              100% { transform: translateX(calc(100vw + 120px)); }
+            }
+            .rv-drive {
+              animation: driveRV 6s linear infinite;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              font-size: 2.5rem;
+              white-space: nowrap;
+              line-height: 1;
+            }
+          `}</style>
+          <div className="rv-drive" aria-hidden="true">🐱🚐</div>
+        </div>
+      )}
     </form>
   )
 }
