@@ -155,7 +155,14 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
             type="date"
             id="startDate"
             value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            onChange={(e) => {
+              setStartDate(e.target.value)
+              if (e.target.value) {
+                const next = new Date(e.target.value + 'T12:00:00')
+                next.setDate(next.getDate() + 1)
+                setEndDate(toLocalDateString(next))
+              }
+            }}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-brand"
           />

@@ -20,7 +20,7 @@ type FeaturedCampground = {
 const FEATURED_CAMPGROUNDS: FeaturedCampground[] = [
   {
     name: 'Little River Campground',
-    photo: 'https://scontent.fric1-2.fna.fbcdn.net/v/t39.30808-6/304890396_480330280769978_3492528433453356650_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=h3qCjY9sMzIQ7kNvwHoDIjF&_nc_oc=AdneZCIaM2jsy-acjFXyhW06kICYv2QKH6Zefb-Ci0zBwsmA2SaWtFmb6EDcijP_Bd0&_nc_zt=23&_nc_ht=scontent.fric1-2.fna&_nc_gid=a92VN1a57_d3hcVstYQm9A&oh=00_AfvaDQ6tsY0is_VVgMT4Ra6s5UXRQN3wVyQMRfmNAWTKtw&oe=69A6BE63',
+    photo: 'https://kgdngaaatfzttkywstkp.supabase.co/storage/v1/object/public/Public%20Storage%20Bucket/littleriver.png',
     city: 'Townsend',
     state: 'TN',
     description: 'Absolutely gorgoeus campground right on the river, and balconies at riverside spots! Easy access to the Smoky Mountains.',
@@ -28,7 +28,7 @@ const FEATURED_CAMPGROUNDS: FeaturedCampground[] = [
   },
   {
     name: 'Americamps RV Resort',
-    photo: 'https://scontent.fric1-2.fna.fbcdn.net/v/t39.30808-1/511035031_122100449870921130_3780170022025541643_n.jpg?stp=c54.0.1939.1939a_dst-jpg_s480x480_tt6&_nc_cat=111&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=ImDZLlCdKwUQ7kNvwGlQFHG&_nc_oc=Adk-ugGr7ZoK8Ubjkr13r-vqaJ64RkyY1aR-cmubDJ26mllySpKDJpPVl10AIrkqHtk&_nc_zt=24&_nc_ht=scontent.fric1-2.fna&_nc_gid=FrODymjdEZP_UygHCENmhA&oh=00_AfsSQdGaIMZN1uQcu7C5YsPYxUEYGYPHky2iBMETjMsmXw&oe=69A6BDBA',
+    photo: 'https://kgdngaaatfzttkywstkp.supabase.co/storage/v1/object/public/Public%20Storage%20Bucket/americamps.png',
     city: 'Ashland',
     state: 'VA',
     description: 'Resort-style campground with full amenities (dog park, gym, pickleball and basketball courts, pool, and more!',
