@@ -49,10 +49,10 @@ function computeBounds(campgrounds: CampgroundVisit[]) {
   if (campgrounds.length === 0) return null
   let north = -90, south = 90, east = -180, west = 180
   for (const { campground } of campgrounds) {
-    north = Math.max(north, campground.latitude)
-    south = Math.min(south, campground.latitude)
-    east = Math.max(east, campground.longitude)
-    west = Math.min(west, campground.longitude)
+    north = Math.max(north, Number(campground.latitude))
+    south = Math.min(south, Number(campground.latitude))
+    east = Math.max(east, Number(campground.longitude))
+    west = Math.min(west, Number(campground.longitude))
   }
   // Add a small padding
   const latPad = Math.max((north - south) * 0.15, 0.5)
@@ -89,7 +89,7 @@ function MapContent({ campgrounds }: Props) {
       {campgrounds.map(({ campground, visits }) => (
         <AdvancedMarker
           key={campground.id}
-          position={{ lat: campground.latitude, lng: campground.longitude }}
+          position={{ lat: Number(campground.latitude), lng: Number(campground.longitude) }}
           title={campground.name}
           onClick={() => handleMarkerClick(campground.id)}
         >
@@ -100,8 +100,8 @@ function MapContent({ campgrounds }: Props) {
       {selectedCampground && (
         <InfoWindow
           position={{
-            lat: selectedCampground.campground.latitude,
-            lng: selectedCampground.campground.longitude,
+            lat: Number(selectedCampground.campground.latitude),
+            lng: Number(selectedCampground.campground.longitude),
           }}
           onCloseClick={handleInfoWindowClose}
           pixelOffset={[0, -36]}
