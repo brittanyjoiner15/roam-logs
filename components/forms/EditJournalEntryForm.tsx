@@ -50,8 +50,8 @@ export default function EditJournalEntryForm({
 
   const handleNewPhotos = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
-    if (files.length + totalPhotos > 5) {
-      setError('Maximum 5 photos allowed')
+    if (files.length + totalPhotos > 10) {
+      setError('Maximum 10 photos allowed')
       return
     }
     setNewPhotos((prev) => [...prev, ...files])
@@ -172,7 +172,7 @@ export default function EditJournalEntryForm({
       {/* Photos */}
       <div>
         <p className="text-sm font-medium text-gray-700 mb-2">
-          Photos <span className="text-gray-400 font-normal">({totalPhotos}/5)</span>
+          Photos <span className="text-gray-400 font-normal">({totalPhotos}/10)</span>
         </p>
 
         {totalPhotos === 0 && (
@@ -222,7 +222,7 @@ export default function EditJournalEntryForm({
           ))}
         </div>
 
-        {totalPhotos < 5 && (
+        {totalPhotos < 10 && (
           <label className="cursor-pointer inline-block w-full">
             <div className="border-2 border-dashed border-gray-300 rounded-button p-3 text-center hover:border-brand transition-colors">
               <p className="text-gray-500 text-sm">📷 Add photos</p>

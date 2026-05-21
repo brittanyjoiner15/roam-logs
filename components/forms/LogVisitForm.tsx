@@ -57,8 +57,8 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
-    if (files.length + photos.length > 5) {
-      setError('Maximum 5 photos allowed')
+    if (files.length + photos.length > 10) {
+      setError('Maximum 10 photos allowed')
       return
     }
     setPhotos([...photos, ...files])
@@ -203,14 +203,14 @@ export default function LogVisitForm({ campground }: LogVisitFormProps) {
       {/* Photos */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Photos (optional, max 5)
+          Photos (optional, max 10)
         </label>
 
-        {photos.length < 5 && (
+        {photos.length < 10 && (
           <label className="cursor-pointer inline-block">
             <div className="border-2 border-dashed border-gray-300 rounded-button p-4 text-center hover:border-brand transition-colors">
               <p className="text-gray-600">📷 Tap to add photos</p>
-              <p className="text-xs text-gray-400 mt-1">{photos.length}/5 photos</p>
+              <p className="text-xs text-gray-400 mt-1">{photos.length}/10 photos</p>
             </div>
             <input
               type="file"
