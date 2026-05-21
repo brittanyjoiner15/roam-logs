@@ -27,6 +27,34 @@ export async function searchCampgrounds(query: string) {
   }
 }
 
+export async function searchCampgroundsNearby(
+  lat: number,
+  lng: number,
+  radiusMeters: number = 50000
+) {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+
+  if (!apiKey) {
+    return { error: 'Google Maps API key not configured' }
+  }
+
+  try {
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radiusMeters}&type=campground&key=${apiKey}`
+
+    const response = await fetch(url)
+    const data = await response.json()
+
+    if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
+      return { error: `Google Places API error: ${data.status}` }
+    }
+
+    return { results: data.results || [] }
+  } catch (error) {
+    console.error('Nearby search error:', error)
+    return { error: 'Failed to search nearby campgrounds' }
+  }
+}
+
 export async function getCampgroundDetails(placeId: string) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 

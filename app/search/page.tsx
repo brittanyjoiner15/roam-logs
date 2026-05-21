@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { searchCampgrounds } from '@/actions/campground'
+import { searchCampgrounds, searchCampgroundsNearby } from '@/actions/campground'
 import { searchUsers, touchLastActive } from '@/actions/profile'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
@@ -63,6 +63,7 @@ export default function SearchPage() {
   const [userResults, setUserResults] = useState<UserResult[]>([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [locating, setLocating] = useState(false)
   const [searched, setSearched] = useState(false)
 
   // Debounced dropdown
@@ -121,6 +122,41 @@ export default function SearchPage() {
   const handleDropdownClick = (type: Tab) => {
     mixpanel.track('Search Result Clicked', { query, type })
     setShowDropdown(false)
+  }
+
+  const handleUseMyLocation = () => {
+    if (!('geolocation' in navigator)) {
+      setError('Your browser does not support location.')
+      return
+    }
+
+    mixpanel.track('Use My Location Clicked')
+    setLocating(true)
+    setError('')
+    setShowDropdown(false)
+    setQuery('')
+    setCampgroundResults([])
+    setUserResults([])
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords
+        setSearched(true)
+        const response = await searchCampgroundsNearby(latitude, longitude)
+        if (response.error) setError(response.error)
+        else setCampgroundResults(response.results || [])
+        setLocating(false)
+      },
+      (err) => {
+        setLocating(false)
+        if (err.code === err.PERMISSION_DENIED) {
+          setError('Location permission denied. Please enable it in your browser settings.')
+        } else {
+          setError('Could not get your location. Try again.')
+        }
+      },
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
+    )
   }
 
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -213,6 +249,26 @@ export default function SearchPage() {
             </div>
           </form>
 
+          {tab === 'campgrounds' && (
+            <button
+              type="button"
+              onClick={handleUseMyLocation}
+              disabled={locating || loading}
+              className="mt-2 inline-flex items-center gap-1.5 text-sm text-brand hover:text-brand/80 transition-colors disabled:opacity-50"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-4 h-4"
+                aria-hidden="true"
+              >
+                <path d="M12 2a1 1 0 0 1 1 1v1.07A8.001 8.001 0 0 1 19.93 11H21a1 1 0 1 1 0 2h-1.07A8.001 8.001 0 0 1 13 19.93V21a1 1 0 1 1-2 0v-1.07A8.001 8.001 0 0 1 4.07 13H3a1 1 0 1 1 0-2h1.07A8.001 8.001 0 0 1 11 4.07V3a1 1 0 0 1 1-1zm0 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" />
+              </svg>
+              {locating ? 'Getting your location...' : 'Use my location'}
+            </button>
+          )}
+
           {/* Dropdown */}
           {(hasDropdown || dropdownLoading) && (
             <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-card shadow-lg border border-gray-100 z-50 overflow-hidden">
@@ -263,7 +319,7 @@ export default function SearchPage() {
         </div>
 
         {/* Featured Campgrounds */}
-        {!query.trim() && (
+        {!query.trim() && !searched && (
           <div className="mb-6">
             <p className="text-sm font-semibold text-ink mb-3">Featured Campgrounds</p>
             <div className="space-y-3">
